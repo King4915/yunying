@@ -1,1033 +1,587 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>招聘专家 · 业务价值看板</title>
+  <title>招聘专家 · 工作价值看板</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    }
-
-    body {
-      background: #eef2f7;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 2rem 1.2rem;
-    }
-
-    .dashboard {
-      max-width: 1400px;
-      width: 100%;
-      background: #ffffff;
-      border-radius: 36px;
-      box-shadow: 0 30px 60px -20px rgba(0, 20, 40, 0.2);
-      padding: 2rem 2.2rem 1.6rem 2.2rem;
-    }
-
-    /* ---------- 头部：你是谁、你在做什么 ---------- */
-    .header {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 1.8rem;
-      gap: 16px;
-    }
-
-    .header-left h1 {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #0b1e33;
-      letter-spacing: -0.02em;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .header-left h1 i {
-      color: #2563eb;
-      background: #e8efff;
-      padding: 10px 12px;
-      border-radius: 16px;
-      font-size: 1.6rem;
-    }
-
-    .header-left .intro-line {
-      color: #3b4f6b;
-      font-size: 0.92rem;
-      margin-top: 10px;
-      line-height: 1.6;
-      max-width: 620px;
-    }
-
-    .header-left .intro-line strong {
-      color: #0b1e33;
-      font-weight: 600;
-    }
-
-    .header-right {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 8px;
-    }
-
-    .signature {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: #f1f5f9;
-      padding: 8px 16px 8px 10px;
-      border-radius: 100px;
-      border: 1px solid #e2e8f0;
-    }
-
-    .signature .avatar {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: #2563eb;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      font-size: 0.85rem;
-    }
-
-    .signature .who {
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: #0b1e33;
-    }
-
-    .signature .role {
-      font-size: 0.7rem;
-      color: #5b6f87;
-    }
-
-    .date-stamp {
-      font-size: 0.78rem;
-      color: #5b6f87;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    /* ---------- 我的结论先行 ---------- */
-    .conclusion-bar {
-      background: #f0f6ff;
-      border-left: 4px solid #2563eb;
-      border-radius: 16px;
-      padding: 1rem 1.4rem;
-      margin-bottom: 1.8rem;
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-    }
-
-    .conclusion-bar .icon {
-      color: #2563eb;
-      font-size: 1.2rem;
-      margin-top: 2px;
-    }
-
-    .conclusion-bar .text {
-      font-size: 0.9rem;
-      color: #0b1e33;
-      line-height: 1.7;
-    }
-
-    .conclusion-bar .text strong {
-      color: #1e40af;
-    }
-
-    /* ---------- 我的核心动作卡片行 ---------- */
-    .action-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.2rem;
-      margin-bottom: 1.8rem;
-    }
-
-    @media (max-width: 1000px) {
-      .action-row {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    .action-card {
-      background: #ffffff;
-      border-radius: 20px;
-      padding: 1.3rem 1.3rem 1.1rem 1.3rem;
-      border: 1px solid #e9f0f8;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
-      transition: all 0.2s ease;
-    }
-
-    .action-card:hover {
-      border-color: #b9d1f0;
-      box-shadow: 0 10px 18px -10px rgba(37, 99, 235, 0.15);
-    }
-
-    .action-card .ac-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-
-    .action-card .ac-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-    }
-
-    .action-card .ac-tag {
-      font-size: 0.68rem;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 100px;
-      background: #f0f4fe;
-      color: #2563eb;
-    }
-
-    .action-card h4 {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #0b1e33;
-      margin-bottom: 6px;
-    }
-
-    .action-card .ac-value {
-      font-size: 1.7rem;
-      font-weight: 700;
-      color: #0b1e33;
-      line-height: 1.2;
-    }
-
-    .action-card .ac-desc {
-      font-size: 0.76rem;
-      color: #5b6f87;
-      margin-top: 6px;
-      line-height: 1.5;
-    }
-
-    /* ---------- 主区域 ---------- */
-    .main-grid {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 1.6rem;
-      margin-bottom: 1.6rem;
-    }
-
-    @media (max-width: 1050px) {
-      .main-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .card {
-      background: #ffffff;
-      border-radius: 24px;
-      padding: 1.5rem 1.6rem 1.3rem 1.6rem;
-      border: 1px solid #e9f0f8;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
-    }
-
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.2rem;
-    }
-
-    .card-header h3 {
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: #0b1e33;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .card-header h3 i {
-      color: #2563eb;
-      font-size: 1.05rem;
-    }
-
-    .card-header .note {
-      font-size: 0.72rem;
-      color: #5b6f87;
-      background: #f1f5f9;
-      padding: 3px 10px;
-      border-radius: 100px;
-    }
-
-    /* ---------- 岗位状态表 ---------- */
-    .job-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.87rem;
-    }
-
-    .job-table th {
-      text-align: left;
-      padding: 0.5rem 0.4rem 0.7rem 0.4rem;
-      color: #5b6f87;
-      font-weight: 500;
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-      border-bottom: 1px solid #e9f0f8;
-    }
-
-    .job-table td {
-      padding: 0.8rem 0.4rem;
-      border-bottom: 1px solid #f1f6fc;
-      color: #1e293b;
-      font-weight: 500;
-      vertical-align: middle;
-    }
-
-    .job-table tr:last-child td {
-      border-bottom: none;
-    }
-
-    .job-cell {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .job-cell .ico {
-      width: 30px;
-      height: 30px;
-      background: #e8efff;
-      border-radius: 9px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #2563eb;
-      font-size: 0.78rem;
-      flex-shrink: 0;
-    }
-
-    .dept {
-      font-size: 0.7rem;
-      background: #f1f5f9;
-      padding: 2px 9px;
-      border-radius: 100px;
-      color: #3b4f6b;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    .progress-mini {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-    }
-
-    .progress-mini .bg {
-      width: 70px;
-      height: 6px;
-      background: #e2e8f0;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .progress-mini .fill {
-      height: 100%;
-      border-radius: 10px;
-    }
-
-    .progress-mini .num {
-      font-size: 0.76rem;
-      font-weight: 600;
-      color: #3b4f6b;
-      min-width: 32px;
-    }
-
-    .status-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 3px 10px;
-      border-radius: 100px;
-      font-size: 0.7rem;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    .st-green { background: #e6f7ee; color: #0e7a4d; }
-    .st-yellow { background: #fef5e6; color: #b45309; }
-    .st-red { background: #fde8e8; color: #b91c1c; }
-    .st-blue { background: #e8efff; color: #1e40af; }
-
-    /* ---------- 我的判断 & 建议 ---------- */
-    .insight-list {
-      display: flex;
-      flex-direction: column;
-      gap: 1.1rem;
-    }
-
-    .insight-item {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-    }
-
-    .insight-item .marker {
-      width: 26px;
-      height: 26px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.7rem;
-      font-weight: 700;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
-    .marker-red { background: #fde8e8; color: #b91c1c; }
-    .marker-yellow { background: #fef5e6; color: #b45309; }
-    .marker-green { background: #e6f7ee; color: #0e7a4d; }
-
-    .insight-body h4 {
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: #0b1e33;
-      margin-bottom: 4px;
-    }
-
-    .insight-body p {
-      font-size: 0.8rem;
-      color: #3b4f6b;
-      line-height: 1.6;
-    }
-
-    .insight-body p strong {
-      color: #0b1e33;
-    }
-
-    .insight-body .action-hint {
-      display: inline-block;
-      margin-top: 6px;
-      font-size: 0.72rem;
-      background: #f0f6ff;
-      color: #1e40af;
-      padding: 3px 10px;
-      border-radius: 100px;
-      font-weight: 600;
-    }
-
-    /* ---------- 内部盘活小卡片 ---------- */
-    .internal-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
-
-    .internal-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.55rem 0;
-      border-bottom: 1px solid #f1f6fc;
-    }
-
-    .internal-row:last-child {
-      border-bottom: none;
-    }
-
-    .internal-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .avatar-s {
-      width: 32px;
-      height: 32px;
-      border-radius: 9px;
-      background: #e8efff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #2563eb;
-      font-weight: 600;
-      font-size: 0.75rem;
-    }
-
-    .internal-info h5 {
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: #0b1e33;
-      margin-bottom: 1px;
-    }
-
-    .internal-info p {
-      font-size: 0.7rem;
-      color: #5b6f87;
-    }
-
-    .move-badge {
-      font-size: 0.68rem;
-      background: #e6f7ee;
-      color: #0e7a4d;
-      padding: 2px 9px;
-      border-radius: 100px;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    .move-badge.pending {
-      background: #fef5e6;
-      color: #b45309;
-    }
-
-    /* ---------- 留存风险 ---------- */
-    .retention-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.65rem 0;
-      border-bottom: 1px solid #f1f6fc;
-    }
-
-    .retention-item:last-child {
-      border-bottom: none;
-    }
-
-    .retention-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .retention-avatar {
-      width: 34px;
-      height: 34px;
-      border-radius: 10px;
-      background: #eef2ff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      color: #2563eb;
-      font-size: 0.82rem;
-    }
-
-    .retention-info h5 {
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: #0b1e33;
-      margin-bottom: 1px;
-    }
-
-    .retention-info p {
-      font-size: 0.7rem;
-      color: #5b6f87;
-    }
-
-    .risk-level {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.72rem;
-      font-weight: 600;
-    }
-
-    .risk-level .d {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      display: inline-block;
-    }
-
-    .d-red { background: #e02f2f; }
-    .d-yellow { background: #d97706; }
-    .d-green { background: #0e9f6e; }
-
-    /* ---------- 底部：给业务/负责人的一句话 ---------- */
-    .bottom-message {
-      margin-top: 1.4rem;
-      background: #f8fbfe;
-      border-radius: 20px;
-      padding: 1.2rem 1.6rem;
-      border: 1px solid #dce8f5;
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-    }
-
-    .bottom-message .icon-lg {
-      color: #2563eb;
-      font-size: 1.5rem;
-      background: #e8efff;
-      padding: 10px;
-      border-radius: 14px;
-      flex-shrink: 0;
-    }
-
-    .bottom-message .msg-body h4 {
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: #0b1e33;
-      margin-bottom: 6px;
-    }
-
-    .bottom-message .msg-body p {
-      font-size: 0.85rem;
-      color: #2d4059;
-      line-height: 1.7;
-    }
-
-    .bottom-message .msg-body p strong {
-      color: #1e40af;
-    }
-
-    .footer-note {
-      margin-top: 1.4rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.76rem;
-      color: #94a3b8;
-      border-top: 1px solid #e9f0f8;
-      padding-top: 1.1rem;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .live-indicator {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-    }
-
-    .pulse-dot {
-      width: 7px;
-      height: 7px;
-      background: #0e9f6e;
-      border-radius: 50%;
-      animation: pulse 1.8s infinite;
-    }
-
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(14, 159, 110, 0.5); }
-      70% { box-shadow: 0 0 0 7px rgba(14, 159, 110, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(14, 159, 110, 0); }
-    }
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; }
+    body { background:#eef2f7; display:flex; align-items:flex-start; justify-content:center; min-height:100vh; padding:2rem 1.2rem; }
+    .dashboard { max-width:1400px; width:100%; background:#fff; border-radius:32px; box-shadow:0 24px 48px -16px rgba(0,20,40,0.16); padding:2rem 2.2rem 1.6rem; }
+
+    /* ========== 工具栏 ========== */
+    .toolbar { display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between; margin-bottom:1.4rem; padding-bottom:1rem; border-bottom:1px solid #edf2f8; }
+    .toolbar-left { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .toolbar-right { display:flex; align-items:center; gap:8px; }
+    .btn { display:inline-flex; align-items:center; gap:6px; padding:7px 14px; border-radius:100px; font-size:0.8rem; font-weight:500; cursor:pointer; border:1px solid #e4eaf2; background:#fff; color:#334155; transition:all 0.15s; }
+    .btn:hover { border-color:#c5d5ea; background:#f8fafc; }
+    .btn-primary { background:#2563eb; color:#fff; border-color:#2563eb; }
+    .btn-primary:hover { background:#1e40af; border-color:#1e40af; }
+    .btn-soft { background:#f0f6ff; color:#1e40af; border-color:#dbe8fc; }
+    .btn-soft:hover { background:#e0ecfe; }
+    .btn-sm { padding:4px 10px; font-size:0.72rem; }
+    .save-status { font-size:0.75rem; color:#0e9f6e; display:flex; align-items:center; gap:5px; opacity:0; transition:opacity 0.3s; }
+    .save-status.show { opacity:1; }
+
+    /* ========== 头部 ========== */
+    .header { display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:space-between; margin-bottom:1.4rem; gap:14px; }
+    .header-left h1 { font-size:1.7rem; font-weight:650; color:#0b1e33; letter-spacing:-0.02em; display:flex; align-items:center; gap:10px; }
+    .header-left h1 i { color:#2563eb; background:#edf3ff; padding:9px 11px; border-radius:14px; font-size:1.4rem; }
+    .header-left .intro-line { color:#475569; font-size:0.87rem; margin-top:8px; line-height:1.65; max-width:640px; }
+    .header-left .intro-line strong { color:#0b1e33; font-weight:600; }
+    .header-right { display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
+    .signature { display:flex; align-items:center; gap:9px; background:#f8fafc; padding:7px 14px 7px 9px; border-radius:100px; border:1px solid #eef2f6; }
+    .signature .avatar { width:32px; height:32px; border-radius:50%; background:#2563eb; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:600; font-size:0.8rem; }
+    .signature .who { font-size:0.8rem; font-weight:600; color:#0b1e33; }
+    .signature .role { font-size:0.68rem; color:#64748b; }
+    .date-stamp { font-size:0.75rem; color:#94a3b8; display:flex; align-items:center; gap:5px; }
+
+    /* ========== 结论条 ========== */
+    .conclusion-bar { background:#f5f9ff; border-left:3px solid #2563eb; border-radius:14px; padding:0.95rem 1.3rem; margin-bottom:1.4rem; display:flex; align-items:flex-start; gap:12px; }
+    .conclusion-bar .icon { color:#2563eb; font-size:1.05rem; margin-top:3px; flex-shrink:0; }
+    .conclusion-bar .text { font-size:0.86rem; color:#1e293b; line-height:1.7; flex:1; }
+    .conclusion-bar .text strong { color:#1e40af; }
+    .conclusion-bar .edit-hint { font-size:0.68rem; color:#94a3b8; margin-top:5px; }
+
+    /* ========== 通用可编辑 ========== */
+    [contenteditable="true"] { outline:none; border-radius:4px; transition:background 0.15s; cursor:text; }
+    [contenteditable="true"]:hover { background:#f5f9ff; }
+    [contenteditable="true"]:focus { background:#edf3ff; box-shadow:0 0 0 2px #dbe8fc; }
+
+    /* ========== 动作卡片 ========== */
+    .action-row { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:1.5rem; }
+    @media(max-width:1000px){ .action-row{grid-template-columns:repeat(2,1fr);} }
+    .action-card { background:#fafcff; border-radius:18px; padding:1.15rem 1.2rem 1rem; border:1px solid #edf2f8; transition:all 0.15s; }
+    .action-card:hover { border-color:#d5e2f0; background:#f8fbff; }
+    .action-card .ac-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+    .action-card .ac-icon { width:36px; height:36px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:1rem; }
+    .action-card h4 { font-size:0.8rem; font-weight:500; color:#64748b; margin-bottom:4px; }
+    .action-card .ac-value { font-size:1.55rem; font-weight:650; color:#0b1e33; line-height:1.2; }
+    .action-card .ac-desc { font-size:0.72rem; color:#64748b; margin-top:5px; line-height:1.5; }
+
+    /* ========== 主网格 ========== */
+    .main-grid { display:grid; grid-template-columns:1.1fr 0.9fr; gap:1.4rem; margin-bottom:1.2rem; }
+    @media(max-width:1050px){ .main-grid{grid-template-columns:1fr;} }
+    .card { background:#fff; border-radius:20px; padding:1.35rem 1.4rem 1.2rem; border:1px solid #edf2f8; }
+    .card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:6px; }
+    .card-header h3 { font-size:1rem; font-weight:600; color:#0b1e33; display:flex; align-items:center; gap:7px; }
+    .card-header h3 i { color:#2563eb; font-size:0.95rem; }
+    .card-header .note { font-size:0.7rem; color:#64748b; background:#f8fafc; padding:3px 10px; border-radius:100px; border:1px solid #eef2f6; }
+
+    /* ========== 岗位表格 ========== */
+    .job-table-wrap { overflow-x:auto; }
+    .job-table { width:100%; border-collapse:collapse; font-size:0.83rem; min-width:640px; }
+    .job-table th { text-align:left; padding:0.45rem 0.35rem 0.65rem; color:#94a3b8; font-weight:500; font-size:0.68rem; text-transform:uppercase; letter-spacing:0.04em; border-bottom:1px solid #edf2f8; white-space:nowrap; }
+    .job-table td { padding:0.65rem 0.35rem; border-bottom:1px solid #f5f8fc; color:#1e293b; font-weight:500; vertical-align:middle; }
+    .job-table tr:last-child td { border-bottom:none; }
+    .job-table tr:hover td { background:#fafcff; }
+    .job-cell { display:flex; align-items:center; gap:9px; }
+    .job-cell .ico { width:28px; height:28px; background:#edf3ff; border-radius:8px; display:flex; align-items:center; justify-content:center; color:#2563eb; font-size:0.72rem; flex-shrink:0; }
+    .dept { font-size:0.68rem; background:#f8fafc; padding:2px 8px; border-radius:100px; color:#475569; font-weight:500; white-space:nowrap; border:1px solid #eef2f6; }
+    .progress-mini { display:flex; align-items:center; gap:6px; }
+    .progress-mini .bg { width:64px; height:5px; background:#eef2f6; border-radius:10px; overflow:hidden; }
+    .progress-mini .fill { height:100%; border-radius:10px; }
+    .progress-mini .num { font-size:0.72rem; font-weight:600; color:#475569; min-width:30px; }
+    .status-tag { display:inline-flex; align-items:center; gap:4px; padding:2px 9px; border-radius:100px; font-size:0.68rem; font-weight:500; white-space:nowrap; }
+    .st-green { background:#e9f7f0; color:#0e7a4d; }
+    .st-yellow { background:#fef7ec; color:#b45309; }
+    .st-red { background:#fdeeee; color:#b91c1c; }
+    .st-blue { background:#edf3ff; color:#1e40af; }
+    .icon-btn { width:24px; height:24px; border-radius:6px; border:1px solid #eef2f6; background:#fff; color:#94a3b8; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:0.65rem; transition:all 0.15s; }
+    .icon-btn:hover { border-color:#d5e2f0; color:#2563eb; background:#f5f9ff; }
+    .icon-btn.del:hover { border-color:#f5c2c2; color:#b91c1c; background:#fdeeee; }
+
+    /* ========== 判断建议 ========== */
+    .insight-list { display:flex; flex-direction:column; gap:0.9rem; }
+    .insight-item { display:flex; gap:10px; align-items:flex-start; }
+    .insight-item .marker { width:24px; height:24px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:0.65rem; font-weight:600; flex-shrink:0; margin-top:2px; }
+    .marker-red { background:#fdeeee; color:#b91c1c; }
+    .marker-yellow { background:#fef7ec; color:#b45309; }
+    .marker-green { background:#e9f7f0; color:#0e7a4d; }
+    .insight-body { flex:1; }
+    .insight-body h4 { font-size:0.84rem; font-weight:600; color:#0b1e33; margin-bottom:3px; }
+    .insight-body p { font-size:0.78rem; color:#475569; line-height:1.65; }
+    .insight-body p strong { color:#0b1e33; }
+    .action-hint { display:inline-block; margin-top:5px; font-size:0.7rem; background:#f5f9ff; color:#1e40af; padding:2px 9px; border-radius:100px; font-weight:500; border:1px solid #dbe8fc; }
+
+    /* ========== 内部盘活 & 保留 ========== */
+    .internal-row, .retention-item { display:flex; align-items:center; justify-content:space-between; padding:0.5rem 0; border-bottom:1px solid #f5f8fc; }
+    .internal-row:last-child, .retention-item:last-child { border-bottom:none; }
+    .internal-left, .retention-left { display:flex; align-items:center; gap:9px; }
+    .avatar-s, .retention-avatar { width:30px; height:30px; border-radius:8px; background:#edf3ff; display:flex; align-items:center; justify-content:center; color:#2563eb; font-weight:600; font-size:0.72rem; flex-shrink:0; }
+    .internal-info h5, .retention-info h5 { font-size:0.8rem; font-weight:600; color:#0b1e33; margin-bottom:1px; }
+    .internal-info p, .retention-info p { font-size:0.68rem; color:#64748b; }
+    .move-badge { font-size:0.66rem; background:#e9f7f0; color:#0e7a4d; padding:2px 8px; border-radius:100px; font-weight:500; white-space:nowrap; }
+    .move-badge.pending { background:#fef7ec; color:#b45309; }
+    .risk-level { display:flex; align-items:center; gap:4px; font-size:0.7rem; font-weight:500; white-space:nowrap; }
+    .risk-level .d { width:6px; height:6px; border-radius:50%; display:inline-block; }
+    .d-red { background:#e02f2f; } .d-yellow { background:#d97706; } .d-green { background:#0e9f6e; }
+
+    /* ========== 底部提示 ========== */
+    .bottom-note { margin-top:1.2rem; background:#f8fafc; border-radius:16px; padding:1rem 1.3rem; border:1px solid #eef2f6; }
+    .bottom-note .bn-head { display:flex; align-items:center; gap:8px; font-size:0.85rem; font-weight:600; color:#0b1e33; margin-bottom:5px; }
+    .bottom-note .bn-head i { color:#2563eb; font-size:0.9rem; }
+    .bottom-note .bn-body { font-size:0.82rem; color:#475569; line-height:1.7; }
+    .bottom-note .bn-body strong { color:#0b1e33; }
+
+    .footer-note { margin-top:1.2rem; display:flex; justify-content:space-between; align-items:center; font-size:0.72rem; color:#94a3b8; border-top:1px solid #edf2f8; padding-top:1rem; flex-wrap:wrap; gap:8px; }
+    .live-indicator { display:flex; align-items:center; gap:6px; }
+    .pulse-dot { width:6px; height:6px; background:#0e9f6e; border-radius:50%; animation:pulse 1.8s infinite; }
+    @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(14,159,110,0.5);} 70%{box-shadow:0 0 0 6px rgba(14,159,110,0);} 100%{box-shadow:0 0 0 0 rgba(14,159,110,0);} }
+
+    /* ========== 弹窗 & Toast ========== */
+    .modal-overlay { position:fixed; inset:0; background:rgba(11,30,51,0.45); display:none; align-items:center; justify-content:center; z-index:1000; padding:1.5rem; }
+    .modal-overlay.show { display:flex; }
+    .modal { background:#fff; border-radius:20px; padding:1.7rem 1.9rem; max-width:620px; width:100%; max-height:85vh; overflow-y:auto; box-shadow:0 24px 48px -12px rgba(0,0,0,0.3); }
+    .modal h3 { font-size:1.1rem; font-weight:650; color:#0b1e33; margin-bottom:5px; display:flex; align-items:center; gap:8px; }
+    .modal h3 i { color:#2563eb; }
+    .modal .modal-desc { font-size:0.8rem; color:#64748b; margin-bottom:1rem; line-height:1.6; }
+    .modal textarea { width:100%; min-height:200px; padding:12px; border:1.5px solid #e4eaf2; border-radius:12px; font-family:'SF Mono',Consolas,Monaco,monospace; font-size:0.8rem; line-height:1.6; color:#1e293b; resize:vertical; outline:none; transition:border 0.15s; }
+    .modal textarea:focus { border-color:#2563eb; box-shadow:0 0 0 3px #edf3ff; }
+    .modal-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:1rem; flex-wrap:wrap; }
+    .modal-hint { background:#f5f9ff; border-radius:10px; padding:9px 12px; font-size:0.73rem; color:#475569; line-height:1.65; margin-bottom:0.9rem; border:1px solid #dbe8fc; }
+    .modal-hint code { background:#fff; padding:1px 5px; border-radius:4px; font-family:monospace; color:#1e40af; font-weight:600; }
+    .toast { position:fixed; bottom:22px; left:50%; transform:translateX(-50%) translateY(70px); background:#0b1e33; color:#fff; padding:10px 20px; border-radius:100px; font-size:0.82rem; font-weight:500; box-shadow:0 8px 24px rgba(0,0,0,0.25); opacity:0; transition:all 0.3s; z-index:2000; display:flex; align-items:center; gap:7px; }
+    .toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+    .toast i { color:#10b981; }
   </style>
 </head>
 <body>
   <div class="dashboard">
 
-    <!-- 头部：我是谁，我在做什么 -->
+    <!-- 工具栏 -->
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <button class="btn btn-primary" onclick="openImport()"><i class="fas fa-file-import"></i> 导入数据</button>
+        <button class="btn btn-soft" onclick="exportCSV()"><i class="fas fa-file-export"></i> 导出 CSV</button>
+        <button class="btn" onclick="resetAll()"><i class="fas fa-rotate-left"></i> 恢复默认</button>
+        <span class="save-status" id="saveStatus"><i class="fas fa-check-circle"></i> 已保存</span>
+      </div>
+      <div class="toolbar-right">
+        <span style="font-size:0.72rem; color:#94a3b8;"><i class="fas fa-pen"></i> 点击任意文字或数字可直接修改</span>
+      </div>
+    </div>
+
+    <!-- 头部 -->
     <div class="header">
       <div class="header-left">
-        <h1>
-          <i class="fas fa-chart-simple"></i> 招聘专家 · 业务价值看板
-        </h1>
+        <h1><i class="fas fa-chart-simple"></i> 招聘工作价值看板</h1>
         <div class="intro-line">
-          <strong>我做的事：</strong>把招聘从"接单填坑"变成"提前判断人才供给、主动盘活内部资源、守住关键人"。
-          这份看板是我对业务和招聘负责人的工作呈现——<strong>结论先行、动作可追踪、价值可量化</strong>。
+          <strong>我的工作方式：</strong>不止于接单填坑——提前判断人才供给、主动盘活内部资源、守住关键人。
+          这份看板呈现<strong>结论、动作和可量化的价值</strong>。
         </div>
       </div>
       <div class="header-right">
         <div class="signature">
-          <div class="avatar">HR</div>
+          <div class="avatar" contenteditable="true" data-key="hrAvatar">HR</div>
           <div>
-            <div class="who">招聘专家</div>
-            <div class="role">业务伙伴视角</div>
+            <div class="who" contenteditable="true" data-key="hrName">招聘专家</div>
+            <div class="role" contenteditable="true" data-key="hrRole">业务伙伴视角</div>
           </div>
         </div>
-        <div class="date-stamp">
-          <i class="fas fa-calendar-alt"></i> 数据截至 2月18日
-        </div>
+        <div class="date-stamp"><i class="fas fa-calendar-alt"></i> 数据截至 <span contenteditable="true" data-key="dataDate">2月18日</span></div>
       </div>
     </div>
 
-    <!-- 结论先行 -->
+    <!-- 结论条 -->
     <div class="conclusion-bar">
       <div class="icon"><i class="fas fa-lightbulb"></i></div>
-      <div class="text">
-        <strong>一句话结论：</strong>6 个业务关键岗位中，3 个已就绪、2 个缺口明显、1 个刚启动；
-        <strong>海外市场负责人</strong>和<strong>数据产品经理</strong>是当前最需要业务方一起想办法的卡点。
-        同时，我通过内部转岗盘活了 4 人，外部招聘依赖度在下降。另有 <strong>2 位关键人才</strong>存在流失风险，建议尽快安排沟通。
+      <div class="text" contenteditable="true" data-key="conclusion">
+        <strong>核心结论：</strong>6 个关键岗位中，3 个已就绪、2 个缺口明显、1 个刚启动；
+        <strong>海外市场负责人</strong>和<strong>数据产品经理</strong>是当前最需要推动的卡点。
+        同时，通过内部转岗盘活 4 人，外部招聘依赖度下降。另有 <strong>2 位关键人才</strong>存在流失风险，已启动沟通。
+        <div class="edit-hint"><i class="fas fa-info-circle"></i> 点击可直接修改结论</div>
       </div>
     </div>
 
-    <!-- 我的核心动作 -->
-    <div class="action-row">
-      <div class="action-card">
-        <div class="ac-top">
-          <div class="ac-icon" style="background:#e8efff; color:#2563eb;"><i class="fas fa-bullseye"></i></div>
-          <span class="ac-tag">外部招聘</span>
-        </div>
-        <h4>关键岗位到岗率</h4>
-        <div class="ac-value">78%</div>
-        <div class="ac-desc">较上月 +12%，3 个岗位已满编，2 个仍在攻坚</div>
-      </div>
-      <div class="action-card">
-        <div class="ac-top">
-          <div class="ac-icon" style="background:#e6f7ee; color:#0e9f6e;"><i class="fas fa-people-arrows"></i></div>
-          <span class="ac-tag">内部盘活</span>
-        </div>
-        <h4>内部转岗 / 试岗</h4>
-        <div class="ac-value">4 人</div>
-        <div class="ac-desc">内转占比从 12% 升至 28%，节省外部招聘成本约 40 万</div>
-      </div>
-      <div class="action-card">
-        <div class="ac-top">
-          <div class="ac-icon" style="background:#fef5e6; color:#b45309;"><i class="fas fa-shield-halved"></i></div>
-          <span class="ac-tag">人才保留</span>
-        </div>
-        <h4>关键人才风险</h4>
-        <div class="ac-value">2 人</div>
-        <div class="ac-desc">技术总监、数据科学家有外部接触，需 retention talk</div>
-      </div>
-      <div class="action-card">
-        <div class="ac-top">
-          <div class="ac-icon" style="background:#f0eaff; color:#7c3aed;"><i class="fas fa-database"></i></div>
-          <span class="ac-tag">人才储备</span>
-        </div>
-        <h4>核心岗位储备池</h4>
-        <div class="ac-value">85%</div>
-        <div class="ac-desc">5/6 岗位已有 2-3 名备选，海外岗仍在建池</div>
-      </div>
-    </div>
+    <!-- 动作卡片 -->
+    <div class="action-row" id="actionRow"></div>
 
-    <!-- 主区域 -->
+    <!-- 主网格 -->
     <div class="main-grid">
-      <!-- 左侧：岗位状态 + 我的判断 -->
+      <!-- 左侧 -->
       <div class="card">
         <div class="card-header">
-          <h3><i class="fas fa-briefcase"></i> 业务关键岗位 · 当前状态</h3>
-          <span class="note">6 个岗位 · 按业务优先级</span>
+          <h3><i class="fas fa-briefcase"></i> 关键岗位 · 当前状态</h3>
+          <div style="display:flex; gap:5px; align-items:center;">
+            <button class="btn btn-sm btn-soft" onclick="addJob()"><i class="fas fa-plus"></i> 新增</button>
+            <span class="note" id="jobCount">6 个岗位</span>
+          </div>
         </div>
-        <table class="job-table">
-          <thead>
-            <tr>
-              <th>岗位</th>
-              <th>部门</th>
-              <th>到位情况</th>
-              <th>就绪度</th>
-              <th>我的判断</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <div class="job-cell">
-                  <div class="ico"><i class="fas fa-cloud-upload-alt"></i></div>
-                  <span>云平台架构师</span>
-                </div>
-              </td>
-              <td><span class="dept">技术中台</span></td>
-              <td>2 / 3</td>
-              <td>
-                <div class="progress-mini">
-                  <div class="bg"><div class="fill" style="width:67%; background:#2563eb;"></div></div>
-                  <span class="num">67%</span>
-                </div>
-              </td>
-              <td><span class="status-tag st-yellow"><i class="fas fa-circle" style="font-size:0.45rem;"></i> 第3人3月到岗</span></td>
-            </tr>
-            <tr>
-              <td>
-                <div class="job-cell">
-                  <div class="ico"><i class="fas fa-chart-line"></i></div>
-                  <span>数据产品经理</span>
-                </div>
-              </td>
-              <td><span class="dept">数据业务</span></td>
-              <td>1 / 2</td>
-              <td>
-                <div class="progress-mini">
-                  <div class="bg"><div class="fill" style="width:50%; background:#d97706;"></div></div>
-                  <span class="num">50%</span>
-                </div>
-              </td>
-              <td><span class="status-tag st-red"><i class="fas fa-circle" style="font-size:0.45rem;"></i> 缺口明显 · 需业务一起想办法</span></td>
-            </tr>
-            <tr>
-              <td>
-                <div class="job-cell">
-                  <div class="ico"><i class="fas fa-robot"></i></div>
-                  <span>AI 应用工程师</span>
-                </div>
-              </td>
-              <td><span class="dept">创新实验室</span></td>
-              <td>2 / 2</td>
-              <td>
-                <div class="progress-mini">
-                  <div class="bg"><div class="fill" style="width:100%; background:#0e9f6e;"></div></div>
-                  <span class="num">100%</span>
-                </div>
-              </td>
-              <td><span class="status-tag st-green"><i class="fas fa-circle" style="font-size:0.45rem;"></i> 已就绪</span></td>
-            </tr>
-            <tr>
-              <td>
-                <div class="job-cell">
-                  <div class="ico"><i class="fas fa-globe"></i></div>
-                  <span>海外市场负责人</span>
-                </div>
-              </td>
-              <td><span class="dept">国际业务</span></td>
-              <td>0 / 1</td>
-              <td>
-                <div class="progress-mini">
-                  <div class="bg"><div class="fill" style="width:0%; background:#e02f2f;"></div></div>
-                  <span class="num">0%</span>
-                </div>
-              </td>
-              <td><span class="status-tag st-red"><i class="fas fa-circle" style="font-size:0.45rem;"></i> 零候选人 · 需换渠道或调整画像</span></td>
-            </tr>
-            <tr>
-              <td>
-                <div class="job-cell">
-                  <div class="ico"><i class="fas fa-shield"></i></div>
-                  <span>信息安全负责人</span>
-                </div>
-              </td>
-              <td><span class="dept">风控合规</span></td>
-              <td>1 / 1</td>
-              <td>
-                <div class="progress-mini">
-                  <div class="bg"><div class="fill" style="width:100%; background:#0e9f6e;"></div></div>
-                  <span class="num">100%</span>
-                </div>
-              </td>
-              <td><span class="status-tag st-green"><i class="fas fa-circle" style="font-size:0.45rem;"></i> 已就绪</span></td>
-            </tr>
-            <tr>
-              <td>
-                <div class="job-cell">
-                  <div class="ico"><i class="fas fa-people-group"></i></div>
-                  <span>组织发展专家</span>
-                </div>
-              </td>
-              <td><span class="dept">人力资源</span></td>
-              <td>0 / 1</td>
-              <td>
-                <div class="progress-mini">
-                  <div class="bg"><div class="fill" style="width:20%; background:#d97706;"></div></div>
-                  <span class="num">20%</span>
-                </div>
-              </td>
-              <td><span class="status-tag st-yellow"><i class="fas fa-circle" style="font-size:0.45rem;"></i> 刚启动 · 已有初步人选</span></td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="job-table-wrap">
+          <table class="job-table">
+            <thead>
+              <tr><th>岗位</th><th>部门</th><th>到位</th><th>就绪度</th><th>当前判断</th><th style="width:40px;"></th></tr>
+            </thead>
+            <tbody id="jobTbody"></tbody>
+          </table>
+        </div>
 
-        <!-- 我的判断与建议 -->
-        <div style="margin-top: 1.4rem; border-top: 1px dashed #dce8f5; padding-top: 1.2rem;">
-          <div style="font-size: 0.82rem; font-weight: 600; color: #0b1e33; margin-bottom: 1rem;">
-            <i class="fas fa-pen" style="color:#2563eb; margin-right: 6px;"></i>我的判断与建议
+        <div style="margin-top:1.2rem; border-top:1px dashed #eef2f6; padding-top:1rem;">
+          <div style="font-size:0.8rem; font-weight:600; color:#0b1e33; margin-bottom:0.9rem; display:flex; justify-content:space-between; align-items:center;">
+            <span><i class="fas fa-pen" style="color:#2563eb; margin-right:5px;"></i>我的判断与建议</span>
+            <button class="btn btn-sm btn-soft" onclick="addInsight()"><i class="fas fa-plus"></i> 新增</button>
           </div>
-          <div class="insight-list">
-            <div class="insight-item">
-              <div class="marker marker-red">01</div>
-              <div class="insight-body">
-                <h4>海外市场负责人是最大卡点</h4>
-                <p>零候选人，不是渠道没铺，是<strong>画像本身需要重新对齐</strong>——按现有 JD 市场上几乎无人匹配。建议和业务负责人花 30 分钟重新拆解"必须项"和"可培养项"，我同步启动跨境渠道和竞品定向寻访。</p>
-                <span class="action-hint"><i class="fas fa-arrow-right"></i> 需业务方参与：画像对齐会</span>
-              </div>
-            </div>
-            <div class="insight-item">
-              <div class="marker marker-yellow">02</div>
-              <div class="insight-body">
-                <h4>数据产品经理：外部难招，内部有牌可打</h4>
-                <p>外部候选人薪酬普遍超预算 15%，硬招性价比低。我已识别 1 名内部运营骨干（王雅茹）具备数据思维和业务理解，目前试岗中。建议业务方给她 <strong>1 个月真实项目历练</strong>，比继续等外部候选人更快。</p>
-                <span class="action-hint"><i class="fas fa-arrow-right"></i> 需业务方支持：试岗项目安排</span>
-              </div>
-            </div>
-            <div class="insight-item">
-              <div class="marker marker-green">03</div>
-              <div class="insight-body">
-                <h4>AI 应用工程师已就绪，可提前释放产能</h4>
-                <p>2 人全部到岗且试用期表现达标，建议业务方<strong>尽快排入项目</strong>，不要让已到位的人空转——这是当前最确定的产出点。</p>
-              </div>
-            </div>
-          </div>
+          <div class="insight-list" id="insightList"></div>
         </div>
       </div>
 
-      <!-- 右侧：内部盘活 + 保留风险 + 储备池 -->
-      <div style="display: flex; flex-direction: column; gap: 1.4rem;">
-        <!-- 内部人才盘活 -->
+      <!-- 右侧 -->
+      <div style="display:flex; flex-direction:column; gap:1.2rem;">
+        <!-- 内部盘活 -->
         <div class="card">
           <div class="card-header">
-            <h3><i class="fas fa-arrows-rotate"></i> 我推动的内部盘活</h3>
-            <span class="note">4 人 · 3 个岗位</span>
-          </div>
-          <div class="internal-list">
-            <div class="internal-row">
-              <div class="internal-left">
-                <div class="avatar-s">李</div>
-                <div class="internal-info">
-                  <h5>李思远</h5>
-                  <p>后端开发 → 云架构（已转岗）</p>
-                </div>
-              </div>
-              <span class="move-badge">已落地</span>
-            </div>
-            <div class="internal-row">
-              <div class="internal-left">
-                <div class="avatar-s">王</div>
-                <div class="internal-info">
-                  <h5>王雅茹</h5>
-                  <p>运营 → 数据产品（试岗中）</p>
-                </div>
-              </div>
-              <span class="move-badge pending">试岗中</span>
-            </div>
-            <div class="internal-row">
-              <div class="internal-left">
-                <div class="avatar-s">张</div>
-                <div class="internal-info">
-                  <h5>张恒</h5>
-                  <p>测试 → DevOps（试岗中）</p>
-                </div>
-              </div>
-              <span class="move-badge pending">试岗中</span>
-            </div>
-            <div class="internal-row">
-              <div class="internal-left">
-                <div class="avatar-s">陈</div>
-                <div class="internal-info">
-                  <h5>陈薇</h5>
-                  <p>客服 → 客户成功（已转岗）</p>
-                </div>
-              </div>
-              <span class="move-badge">已落地</span>
+            <h3><i class="fas fa-arrows-rotate"></i> 内部盘活</h3>
+            <div style="display:flex; gap:5px; align-items:center;">
+              <button class="btn btn-sm btn-soft" onclick="addInternal()"><i class="fas fa-plus"></i></button>
+              <span class="note" id="internalCount">4 人</span>
             </div>
           </div>
-          <div style="margin-top: 1rem; font-size: 0.76rem; color: #3b4f6b; background: #f0f6ff; padding: 10px 14px; border-radius: 12px; line-height: 1.6;">
-            <i class="fas fa-coins" style="color:#2563eb; margin-right: 6px;"></i>
-            4 个转岗若全部成功，相当于<strong>省下 4 个外部招聘 HC</strong>，按人均招聘成本估算约 40 万，且到岗周期比外部招聘平均快 2 个月。
+          <div class="internal-list" id="internalList"></div>
+          <div style="margin-top:0.8rem; font-size:0.74rem; color:#475569; background:#f5f9ff; padding:9px 12px; border-radius:10px; line-height:1.6; border:1px solid #dbe8fc;" contenteditable="true" data-key="internalNote">
+            <i class="fas fa-coins" style="color:#2563eb; margin-right:5px;"></i>
+            4 个转岗若全部成功，相当于省下 4 个外部招聘 HC，按人均招聘成本估算约 40 万，到岗周期比外部招聘平均快 2 个月。
           </div>
         </div>
 
         <!-- 关键人才保留 -->
         <div class="card">
           <div class="card-header">
-            <h3><i class="fas fa-shield-halved"></i> 我盯着的关键人才</h3>
-            <span class="note">2 人高风险</span>
-          </div>
-          <div class="retention-item">
-            <div class="retention-left">
-              <div class="retention-avatar">赵</div>
-              <div class="retention-info">
-                <h5>赵铭 · 技术总监</h5>
-                <p>核心架构决策人 · 外部有接触</p>
-              </div>
+            <h3><i class="fas fa-shield-halved"></i> 关键人才关注</h3>
+            <div style="display:flex; gap:5px; align-items:center;">
+              <button class="btn btn-sm btn-soft" onclick="addRetention()"><i class="fas fa-plus"></i></button>
+              <span class="note" id="retentionCount">3 人</span>
             </div>
-            <div class="risk-level"><span class="d d-red"></span> 高</div>
           </div>
-          <div class="retention-item">
-            <div class="retention-left">
-              <div class="retention-avatar">周</div>
-              <div class="retention-info">
-                <h5>周涛 · 数据科学家</h5>
-                <p>稀缺技能 · 市场机会多</p>
-              </div>
-            </div>
-            <div class="risk-level"><span class="d d-red"></span> 高</div>
-          </div>
-          <div class="retention-item">
-            <div class="retention-left">
-              <div class="retention-avatar">孙</div>
-              <div class="retention-info">
-                <h5>孙丽 · 产品负责人</h5>
-                <p>业务连续性关键人</p>
-              </div>
-            </div>
-            <div class="risk-level"><span class="d d-yellow"></span> 中</div>
-          </div>
-          <div style="margin-top: 0.9rem; font-size: 0.76rem; color: #3b4f6b; background: #fef5e6; padding: 10px 14px; border-radius: 12px; line-height: 1.6;">
-            <i class="fas fa-comment" style="color:#b45309; margin-right: 6px;"></i>
-            已同步 HRBP 安排 retention talk，同时我这边保持竞品同岗位人才地图更新，作为应急备份。
+          <div id="retentionList"></div>
+          <div style="margin-top:0.8rem; font-size:0.74rem; color:#475569; background:#fef9f2; padding:9px 12px; border-radius:10px; line-height:1.6; border:1px solid #fde8c8;" contenteditable="true" data-key="retentionNote">
+            <i class="fas fa-comment" style="color:#b45309; margin-right:5px;"></i>
+            已同步 HRBP 安排 retention talk，同时保持竞品同岗位人才地图更新，作为应急备份。
           </div>
         </div>
 
-        <!-- 人才储备池 -->
+        <!-- 储备池 -->
         <div class="card">
           <div class="card-header">
-            <h3><i class="fas fa-database"></i> 我的储备池建设</h3>
-            <span class="note">覆盖 5/6 岗位</span>
-          </div>
-          <div style="display: flex; flex-direction: column; gap: 0.7rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-size: 0.82rem; color: #3b4f6b;">云平台架构师</span>
-              <span style="font-size: 0.78rem; font-weight: 600; color: #0e7a4d;">3 名备选</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-size: 0.82rem; color: #3b4f6b;">数据产品经理</span>
-              <span style="font-size: 0.78rem; font-weight: 600; color: #b45309;">2 名备选（偏弱）</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-size: 0.82rem; color: #3b4f6b;">AI 应用工程师</span>
-              <span style="font-size: 0.78rem; font-weight: 600; color: #0e7a4d;">2 名备选</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-size: 0.82rem; color: #3b4f6b;">信息安全负责人</span>
-              <span style="font-size: 0.78rem; font-weight: 600; color: #0e7a4d;">2 名备选</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span style="font-size: 0.82rem; color: #3b4f6b;">海外市场负责人</span>
-              <span style="font-size: 0.78rem; font-weight: 600; color: #b91c1c;">建池中</span>
+            <h3><i class="fas fa-database"></i> 储备池建设</h3>
+            <div style="display:flex; gap:5px; align-items:center;">
+              <button class="btn btn-sm btn-soft" onclick="addPool()"><i class="fas fa-plus"></i></button>
+              <span class="note">覆盖 5/6 岗位</span>
             </div>
           </div>
-          <div style="margin-top: 1rem; font-size: 0.76rem; color: #3b4f6b; background: #f0f6ff; padding: 10px 14px; border-radius: 12px; line-height: 1.6;">
-            <i class="fas fa-clock" style="color:#2563eb; margin-right: 6px;"></i>
-            储备池的意义：一旦在岗人员流失或业务突然扩编，<strong>2 周内可启动面试</strong>，不用从零开始。
+          <div id="poolList" style="display:flex; flex-direction:column; gap:0.6rem;"></div>
+          <div style="margin-top:0.8rem; font-size:0.74rem; color:#475569; background:#f5f9ff; padding:9px 12px; border-radius:10px; line-height:1.6; border:1px solid #dbe8fc;" contenteditable="true" data-key="poolNote">
+            <i class="fas fa-clock" style="color:#2563eb; margin-right:5px;"></i>
+            储备池的意义：一旦在岗人员流失或业务突然扩编，2 周内可启动面试，不用从零开始。
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 底部：对业务/负责人的一句话 -->
-    <div class="bottom-message">
-      <div class="icon-lg"><i class="fas fa-handshake"></i></div>
-      <div class="msg-body">
-        <h4>需要业务方 / 招聘负责人支持的事项</h4>
-        <p>
-          <strong>对业务：</strong>① 海外市场负责人画像需要重新对齐，约 30 分钟碰一下"必须项"；
-          ② 数据产品经理试岗人选（王雅茹）请安排真实项目历练，1 个月后一起评估；
-          ③ AI 应用工程师已就绪，请尽快排入项目释放产能。
-          <br>
-          <strong>对招聘负责人：</strong>关键人才保留（赵铭、周涛）已同步 HRBP，我这边保持竞品人才地图更新；
-          海外岗渠道预算若需调整，我本周内出对比方案。需要您拍板的是：<strong>海外岗是否接受先招"高潜+培养"而非"即插即用"</strong>。
-        </p>
+    <!-- 底部：中性口吻的工作说明 -->
+    <div class="bottom-note">
+      <div class="bn-head"><i class="fas fa-circle-info"></i> 当前推进重点</div>
+      <div class="bn-body" contenteditable="true" data-key="bottomMsg">
+        ① 海外市场负责人画像需要重新对齐，约 30 分钟碰一下"必须项"；
+        ② 数据产品经理试岗人选（王雅茹）安排真实项目历练，1 个月后一起评估；
+        ③ AI 应用工程师已就绪，尽快排入项目释放产能。
+        关键人才保留（赵铭、周涛）已同步 HRBP，竞品人才地图持续更新；海外岗渠道预算若需调整，本周内出对比方案。
+        需要拍板的是：<strong>海外岗是否接受先招"高潜+培养"而非"即插即用"</strong>。
       </div>
     </div>
 
-    <!-- 页脚 -->
     <div class="footer-note">
-      <div class="live-indicator">
-        <span class="pulse-dot"></span> 招聘系统 & 业务反馈实时同步
+      <div class="live-indicator"><span class="pulse-dot"></span> 数据自动保存至浏览器本地</div>
+      <div><i class="fas fa-rotate-right" style="margin-right:5px;"></i> 下次更新：<span contenteditable="true" data-key="nextUpdate">2月20日</span></div>
+    </div>
+  </div>
+
+  <!-- 导入弹窗 -->
+  <div class="modal-overlay" id="importModal">
+    <div class="modal">
+      <h3><i class="fas fa-file-import"></i> 导入岗位数据</h3>
+      <div class="modal-desc">从 Excel / 飞书表格 / 腾讯文档复制数据，粘贴到下方即可批量导入。第一行是表头。</div>
+      <div class="modal-hint">
+        每行一个岗位，用 <code>Tab</code> 或 <code>逗号</code> 分隔。<br>
+        列顺序：<strong>岗位名称, 部门, 到位情况(如2/3), 就绪度百分比(如67), 当前判断, 状态(绿/黄/红/蓝)</strong><br>
+        示例：<code>云平台架构师,技术中台,2/3,67,第3人3月到岗,黄</code>
       </div>
-      <div>
-        <i class="fas fa-rotate-right" style="margin-right: 6px;"></i> 下次更新：2月20日 · 招聘专家本人维护
+      <textarea id="importText" placeholder="岗位名称,部门,到位,就绪度,判断,状态&#10;云平台架构师,技术中台,2/3,67,第3人3月到岗,黄&#10;数据产品经理,数据业务,1/2,50,缺口明显,红"></textarea>
+      <div class="modal-actions">
+        <button class="btn" onclick="closeImport()">取消</button>
+        <button class="btn" onclick="fillSample()">填入示例</button>
+        <button class="btn btn-primary" onclick="doImport()"><i class="fas fa-check"></i> 确认导入</button>
       </div>
     </div>
   </div>
+
+  <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toastMsg">已保存</span></div>
+
+  <script>
+    const DEFAULT_DATA = {
+      hrAvatar: 'HR', hrName: '招聘专家', hrRole: '业务伙伴视角',
+      dataDate: '2月18日', nextUpdate: '2月20日',
+      conclusion: '<strong>核心结论：</strong>6 个关键岗位中，3 个已就绪、2 个缺口明显、1 个刚启动；<strong>海外市场负责人</strong>和<strong>数据产品经理</strong>是当前最需要推动的卡点。同时，通过内部转岗盘活 4 人，外部招聘依赖度下降。另有 <strong>2 位关键人才</strong>存在流失风险，已启动沟通。',
+      actions: [
+        { icon:'fa-bullseye', iconBg:'#edf3ff', iconColor:'#2563eb', tag:'外部招聘', title:'关键岗位到岗率', value:'78%', desc:'较上月 +12%，3 个岗位已满编，2 个仍在攻坚' },
+        { icon:'fa-people-arrows', iconBg:'#e9f7f0', iconColor:'#0e9f6e', tag:'内部盘活', title:'内部转岗 / 试岗', value:'4 人', desc:'内转占比从 12% 升至 28%，节省成本约 40 万' },
+        { icon:'fa-shield-halved', iconBg:'#fef7ec', iconColor:'#b45309', tag:'人才保留', title:'关键人才风险', value:'2 人', desc:'技术总监、数据科学家有外部接触，已启动沟通' },
+        { icon:'fa-database', iconBg:'#f0edff', iconColor:'#7c3aed', tag:'人才储备', title:'核心岗位储备池', value:'85%', desc:'5/6 岗位已有 2-3 名备选，海外岗仍在建池' }
+      ],
+      jobs: [
+        { name:'云平台架构师', icon:'fa-cloud-upload-alt', dept:'技术中台', arrived:'2 / 3', ready:67, judgment:'第3人3月到岗', status:'黄' },
+        { name:'数据产品经理', icon:'fa-chart-line', dept:'数据业务', arrived:'1 / 2', ready:50, judgment:'缺口明显，需推动画像对齐', status:'红' },
+        { name:'AI 应用工程师', icon:'fa-robot', dept:'创新实验室', arrived:'2 / 2', ready:100, judgment:'已就绪', status:'绿' },
+        { name:'海外市场负责人', icon:'fa-globe', dept:'国际业务', arrived:'0 / 1', ready:0, judgment:'零候选人，需换渠道或调整画像', status:'红' },
+        { name:'信息安全负责人', icon:'fa-shield', dept:'风控合规', arrived:'1 / 1', ready:100, judgment:'已就绪', status:'绿' },
+        { name:'组织发展专家', icon:'fa-people-group', dept:'人力资源', arrived:'0 / 1', ready:20, judgment:'刚启动，已有初步人选', status:'黄' }
+      ],
+      insights: [
+        { mark:'01', type:'red', title:'海外市场负责人是最大卡点', desc:'零候选人，不是渠道没铺，是画像本身需要重新对齐——按现有 JD 市场上几乎无人匹配。建议花 30 分钟重新拆解"必须项"和"可培养项"，同步启动跨境渠道和竞品定向寻访。', hint:'需推动：画像对齐' },
+        { mark:'02', type:'yellow', title:'数据产品经理：外部难招，内部有牌可打', desc:'外部候选人薪酬普遍超预算 15%，硬招性价比低。已识别 1 名内部运营骨干（王雅茹）具备数据思维和业务理解，目前试岗中。建议给她 1 个月真实项目历练，比继续等外部候选人更快。', hint:'需推动：试岗项目安排' },
+        { mark:'03', type:'green', title:'AI 应用工程师已就绪，可提前释放产能', desc:'2 人全部到岗且试用期表现达标，建议尽快排入项目，不要让已到位的人空转——这是当前最确定的产出点。', hint:'' }
+      ],
+      internals: [
+        { name:'李思远', desc:'后端开发 → 云架构（已转岗）', badge:'已落地', pending:false },
+        { name:'王雅茹', desc:'运营 → 数据产品（试岗中）', badge:'试岗中', pending:true },
+        { name:'张恒', desc:'测试 → DevOps（试岗中）', badge:'试岗中', pending:true },
+        { name:'陈薇', desc:'客服 → 客户成功（已转岗）', badge:'已落地', pending:false }
+      ],
+      internalNote: '<i class="fas fa-coins" style="color:#2563eb; margin-right:5px;"></i>4 个转岗若全部成功，相当于省下 4 个外部招聘 HC，按人均招聘成本估算约 40 万，到岗周期比外部招聘平均快 2 个月。',
+      retentions: [
+        { name:'赵铭 · 技术总监', desc:'核心架构决策人 · 外部有接触', risk:'高', riskType:'red' },
+        { name:'周涛 · 数据科学家', desc:'稀缺技能 · 市场机会多', risk:'高', riskType:'red' },
+        { name:'孙丽 · 产品负责人', desc:'业务连续性关键人', risk:'中', riskType:'yellow' }
+      ],
+      retentionNote: '<i class="fas fa-comment" style="color:#b45309; margin-right:5px;"></i>已同步 HRBP 安排 retention talk，同时保持竞品同岗位人才地图更新，作为应急备份。',
+      pools: [
+        { name:'云平台架构师', count:'3 名备选', color:'#0e7a4d' },
+        { name:'数据产品经理', count:'2 名备选（偏弱）', color:'#b45309' },
+        { name:'AI 应用工程师', count:'2 名备选', color:'#0e7a4d' },
+        { name:'信息安全负责人', count:'2 名备选', color:'#0e7a4d' },
+        { name:'海外市场负责人', count:'建池中', color:'#b91c1c' }
+      ],
+      poolNote: '<i class="fas fa-clock" style="color:#2563eb; margin-right:5px;"></i>储备池的意义：一旦在岗人员流失或业务突然扩编，2 周内可启动面试，不用从零开始。',
+      bottomMsg: '① 海外市场负责人画像需要重新对齐，约 30 分钟碰一下"必须项"；② 数据产品经理试岗人选（王雅茹）安排真实项目历练，1 个月后一起评估；③ AI 应用工程师已就绪，尽快排入项目释放产能。关键人才保留（赵铭、周涛）已同步 HRBP，竞品人才地图持续更新；海外岗渠道预算若需调整，本周内出对比方案。需要拍板的是：<strong>海外岗是否接受先招"高潜+培养"而非"即插即用"</strong>。'
+    };
+
+    const STORAGE_KEY = 'hr_dashboard_v3';
+    let data = loadData();
+
+    function loadData() {
+      try { const s = localStorage.getItem(STORAGE_KEY); if (s) return JSON.parse(s); } catch(e) {}
+      return JSON.parse(JSON.stringify(DEFAULT_DATA));
+    }
+    function saveData() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); showSaveStatus(); } catch(e) {}
+    }
+    let saveTimer;
+    function showSaveStatus() {
+      const el = document.getElementById('saveStatus');
+      el.classList.add('show');
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => el.classList.remove('show'), 1500);
+    }
+    function toast(msg) {
+      const t = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+
+    // ===== 渲染 =====
+    function renderActions() {
+      document.getElementById('actionRow').innerHTML = data.actions.map((a, i) => `
+        <div class="action-card">
+          <div class="ac-top">
+            <div class="ac-icon" style="background:${a.iconBg}; color:${a.iconColor};"><i class="fas ${a.icon}"></i></div>
+            <span style="font-size:0.66rem; font-weight:500; color:#94a3b8; background:#f8fafc; padding:2px 8px; border-radius:100px; border:1px solid #eef2f6;" contenteditable="true" data-act="actions" data-i="${i}" data-field="tag">${a.tag}</span>
+          </div>
+          <h4 contenteditable="true" data-act="actions" data-i="${i}" data-field="title">${a.title}</h4>
+          <div class="ac-value" contenteditable="true" data-act="actions" data-i="${i}" data-field="value">${a.value}</div>
+          <div class="ac-desc" contenteditable="true" data-act="actions" data-i="${i}" data-field="desc">${a.desc}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderJobs() {
+      document.getElementById('jobTbody').innerHTML = data.jobs.map((j, i) => {
+        const stClass = j.status === '绿' ? 'st-green' : j.status === '黄' ? 'st-yellow' : j.status === '红' ? 'st-red' : 'st-blue';
+        const fillColor = j.ready >= 100 ? '#0e9f6e' : j.ready >= 60 ? '#2563eb' : j.ready >= 30 ? '#d97706' : '#e02f2f';
+        return `
+        <tr>
+          <td><div class="job-cell"><div class="ico"><i class="fas ${j.icon || 'fa-briefcase'}"></i></div><span contenteditable="true" data-act="jobs" data-i="${i}" data-field="name">${j.name}</span></div></td>
+          <td><span class="dept" contenteditable="true" data-act="jobs" data-i="${i}" data-field="dept">${j.dept}</span></td>
+          <td contenteditable="true" data-act="jobs" data-i="${i}" data-field="arrived">${j.arrived}</td>
+          <td><div class="progress-mini"><div class="bg"><div class="fill" style="width:${j.ready}%; background:${fillColor};"></div></div><span class="num" contenteditable="true" data-act="jobs" data-i="${i}" data-field="ready">${j.ready}%</span></div></td>
+          <td><span class="status-tag ${stClass}" contenteditable="true" data-act="jobs" data-i="${i}" data-field="judgment">${j.judgment}</span></td>
+          <td><button class="icon-btn del" onclick="delJob(${i})"><i class="fas fa-trash"></i></button></td>
+        </tr>`;
+      }).join('');
+      document.getElementById('jobCount').textContent = data.jobs.length + ' 个岗位';
+    }
+
+    function renderInsights() {
+      document.getElementById('insightList').innerHTML = data.insights.map((ins, i) => `
+        <div class="insight-item">
+          <div class="marker marker-${ins.type}" contenteditable="true" data-act="insights" data-i="${i}" data-field="mark">${ins.mark}</div>
+          <div class="insight-body">
+            <h4 contenteditable="true" data-act="insights" data-i="${i}" data-field="title">${ins.title}</h4>
+            <p contenteditable="true" data-act="insights" data-i="${i}" data-field="desc">${ins.desc}</p>
+            ${ins.hint ? `<span class="action-hint" contenteditable="true" data-act="insights" data-i="${i}" data-field="hint">${ins.hint}</span>` : ''}
+            <div style="margin-top:5px;"><button class="icon-btn del" onclick="delInsight(${i})" style="width:20px;height:20px;font-size:0.6rem;"><i class="fas fa-trash"></i></button></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderInternals() {
+      document.getElementById('internalList').innerHTML = data.internals.map((it, i) => `
+        <div class="internal-row">
+          <div class="internal-left">
+            <div class="avatar-s" contenteditable="true" data-act="internals" data-i="${i}" data-field="avatarText">${it.name.charAt(0)}</div>
+            <div class="internal-info">
+              <h5 contenteditable="true" data-act="internals" data-i="${i}" data-field="name">${it.name}</h5>
+              <p contenteditable="true" data-act="internals" data-i="${i}" data-field="desc">${it.desc}</p>
+            </div>
+          </div>
+          <div style="display:flex; gap:5px; align-items:center;">
+            <span class="move-badge ${it.pending ? 'pending' : ''}" contenteditable="true" data-act="internals" data-i="${i}" data-field="badge">${it.badge}</span>
+            <button class="icon-btn del" onclick="delInternal(${i})"><i class="fas fa-trash"></i></button>
+          </div>
+        </div>
+      `).join('');
+      document.getElementById('internalCount').textContent = data.internals.length + ' 人';
+    }
+
+    function renderRetentions() {
+      document.getElementById('retentionList').innerHTML = data.retentions.map((r, i) => `
+        <div class="retention-item">
+          <div class="retention-left">
+            <div class="retention-avatar" contenteditable="true" data-act="retentions" data-i="${i}" data-field="avatarText">${r.name.charAt(0)}</div>
+            <div class="retention-info">
+              <h5 contenteditable="true" data-act="retentions" data-i="${i}" data-field="name">${r.name}</h5>
+              <p contenteditable="true" data-act="retentions" data-i="${i}" data-field="desc">${r.desc}</p>
+            </div>
+          </div>
+          <div style="display:flex; gap:5px; align-items:center;">
+            <div class="risk-level"><span class="d d-${r.riskType}"></span><span contenteditable="true" data-act="retentions" data-i="${i}" data-field="risk">${r.risk}</span></div>
+            <button class="icon-btn del" onclick="delRetention(${i})"><i class="fas fa-trash"></i></button>
+          </div>
+        </div>
+      `).join('');
+      document.getElementById('retentionCount').textContent = data.retentions.length + ' 人';
+    }
+
+    function renderPools() {
+      document.getElementById('poolList').innerHTML = data.pools.map((p, i) => `
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:0.8rem; color:#475569;" contenteditable="true" data-act="pools" data-i="${i}" data-field="name">${p.name}</span>
+          <div style="display:flex; gap:5px; align-items:center;">
+            <span style="font-size:0.75rem; font-weight:600; color:${p.color};" contenteditable="true" data-act="pools" data-i="${i}" data-field="count">${p.count}</span>
+            <button class="icon-btn del" onclick="delPool(${i})" style="width:20px;height:20px;font-size:0.6rem;"><i class="fas fa-trash"></i></button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderAll() {
+      renderActions(); renderJobs(); renderInsights(); renderInternals(); renderRetentions(); renderPools();
+      document.querySelectorAll('[data-key]').forEach(el => {
+        const key = el.dataset.key;
+        if (data[key] !== undefined && !['conclusion','bottomMsg','internalNote','retentionNote','poolNote'].includes(key)) {
+          el.innerText = data[key];
+        }
+      });
+      // 这几个字段用 innerHTML 保留格式
+      ['conclusion','bottomMsg','internalNote','retentionNote','poolNote'].forEach(k => {
+        const el = document.querySelector(`[data-key="${k}"]`);
+        if (el && data[k]) el.innerHTML = data[k];
+      });
+    }
+
+    // ===== 编辑自动保存 =====
+    document.addEventListener('input', function(e) {
+      const el = e.target;
+      if (el.dataset.key) {
+        const htmlKeys = ['conclusion','bottomMsg','internalNote','retentionNote','poolNote'];
+        if (htmlKeys.includes(el.dataset.key)) data[el.dataset.key] = el.innerHTML;
+        else data[el.dataset.key] = el.innerText;
+        saveData(); return;
+      }
+      const act = el.dataset.act;
+      if (act && el.dataset.i !== undefined && el.dataset.field) {
+        const i = parseInt(el.dataset.i), field = el.dataset.field, value = el.innerText;
+        if (act === 'actions') data.actions[i][field] = value;
+        else if (act === 'jobs') { if (field === 'ready') data.jobs[i].ready = parseInt(value.replace('%','')) || 0; else data.jobs[i][field] = value; }
+        else if (act === 'insights') data.insights[i][field] = value;
+        else if (act === 'internals') data.internals[i][field] = value;
+        else if (act === 'retentions') data.retentions[i][field] = value;
+        else if (act === 'pools') data.pools[i][field] = value;
+        saveData();
+      }
+    });
+
+    document.addEventListener('blur', function(e) {
+      if (e.target.dataset.act === 'jobs' && e.target.dataset.field === 'ready') renderJobs();
+    }, true);
+
+    // ===== 增删 =====
+    function addJob() { data.jobs.push({ name:'新岗位', icon:'fa-briefcase', dept:'待定', arrived:'0 / 1', ready:0, judgment:'待补充', status:'蓝' }); renderJobs(); saveData(); toast('已新增'); }
+    function delJob(i) { if (!confirm('确定删除这个岗位吗？')) return; data.jobs.splice(i,1); renderJobs(); saveData(); toast('已删除'); }
+    function addInsight() { data.insights.push({ mark:String(data.insights.length+1).padStart(2,'0'), type:'yellow', title:'新判断', desc:'点击编辑内容', hint:'' }); renderInsights(); saveData(); toast('已新增'); }
+    function delInsight(i) { if (!confirm('确定删除吗？')) return; data.insights.splice(i,1); renderInsights(); saveData(); toast('已删除'); }
+    function addInternal() { data.internals.push({ name:'新员工', desc:'原岗位 → 新岗位', badge:'试岗中', pending:true }); renderInternals(); saveData(); toast('已新增'); }
+    function delInternal(i) { if (!confirm('确定删除吗？')) return; data.internals.splice(i,1); renderInternals(); saveData(); toast('已删除'); }
+    function addRetention() { data.retentions.push({ name:'新员工', desc:'关键岗位', risk:'中', riskType:'yellow' }); renderRetentions(); saveData(); toast('已新增'); }
+    function delRetention(i) { if (!confirm('确定删除吗？')) return; data.retentions.splice(i,1); renderRetentions(); saveData(); toast('已删除'); }
+    function addPool() { data.pools.push({ name:'新岗位', count:'0 名备选', color:'#0e7a4d' }); renderPools(); saveData(); toast('已新增'); }
+    function delPool(i) { if (!confirm('确定删除吗？')) return; data.pools.splice(i,1); renderPools(); saveData(); toast('已删除'); }
+    function resetAll() { if (!confirm('恢复默认数据？当前修改将丢失。')) return; data = JSON.parse(JSON.stringify(DEFAULT_DATA)); renderAll(); saveData(); toast('已恢复默认'); }
+
+    // ===== 导入/导出 =====
+    function openImport() { document.getElementById('importModal').classList.add('show'); }
+    function closeImport() { document.getElementById('importModal').classList.remove('show'); }
+    function fillSample() {
+      document.getElementById('importText').value = `云平台架构师,技术中台,2/3,67,第3人3月到岗,黄
+数据产品经理,数据业务,1/2,50,缺口明显需画像对齐,红
+AI应用工程师,创新实验室,2/2,100,已就绪,绿
+海外市场负责人,国际业务,0/1,0,零候选人需换渠道,红
+信息安全负责人,风控合规,1/1,100,已就绪,绿
+组织发展专家,人力资源,0/1,20,刚启动,黄`;
+    }
+    function doImport() {
+      const text = document.getElementById('importText').value.trim();
+      if (!text) { toast('请先粘贴数据'); return; }
+      const lines = text.split('\n').filter(l => l.trim());
+      const newJobs = [];
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        if (i === 0 && (line.includes('岗位名称') || line.includes('职位'))) continue;
+        let parts = line.includes('\t') ? line.split('\t') : line.split(',');
+        parts = parts.map(p => p.trim());
+        if (parts.length < 5) continue;
+        const statusMap = { '绿':'绿','黄':'黄','红':'红','蓝':'蓝','green':'绿','yellow':'黄','red':'红','blue':'蓝' };
+        const sr = (parts[5] || '蓝').trim();
+        newJobs.push({ name:parts[0]||'未命名', icon:'fa-briefcase', dept:parts[1]||'待定', arrived:parts[2]||'0 / 1', ready:parseInt((parts[3]||'0').replace('%',''))||0, judgment:parts[4]||'待补充', status:statusMap[sr]||'蓝' });
+      }
+      if (!newJobs.length) { toast('未识别到有效数据'); return; }
+      data.jobs = newJobs; renderJobs(); saveData(); closeImport(); toast(`成功导入 ${newJobs.length} 个岗位`);
+    }
+    function exportCSV() {
+      const headers = ['岗位名称','部门','到位情况','就绪度(%)','当前判断','状态'];
+      const rows = data.jobs.map(j => [j.name, j.dept, j.arrived, j.ready, j.judgment, j.status]);
+      const csv = [headers, ...rows].map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+      const blob = new Blob(['\ufeff' + csv], { type:'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `招聘看板_岗位数据_${new Date().toISOString().slice(0,10)}.csv`;
+      link.click(); toast('已导出 CSV');
+    }
+
+    renderAll();
+    document.getElementById('importModal').addEventListener('click', function(e) { if (e.target === this) closeImport(); });
+  </script>
 </body>
 </html>
